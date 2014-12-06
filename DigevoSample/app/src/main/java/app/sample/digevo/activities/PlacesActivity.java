@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 
 import app.sample.digevo.R;
+import app.sample.digevo.adapters.CallInfoWindowAdapter;
 import app.sample.digevo.network.ClientApi;
 import app.sample.digevo.network.entities.Call;
 import app.sample.digevo.network.responses.LastCallsResponse;
@@ -92,6 +93,7 @@ public class PlacesActivity extends FragmentActivity implements GoogleMap.OnInfo
 
         //respond on info window touch
         mMap.setOnInfoWindowClickListener(this);
+        mMap.setInfoWindowAdapter(new CallInfoWindowAdapter(this));
 
         //zoom a bit to my position
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -133,7 +135,7 @@ public class PlacesActivity extends FragmentActivity implements GoogleMap.OnInfo
                         Marker marker = mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(call.getLatitude(), call.getLongitude()))
                                 .title(call.getTitle())
-                                .snippet(call.getContent() + " " + call.getTimestamp().toString()));
+                                .snippet(call.getContent() + "\n" + call.getTimestamp().toString()));
 
                         mMarkers.add(marker);
                     }
@@ -165,7 +167,7 @@ public class PlacesActivity extends FragmentActivity implements GoogleMap.OnInfo
     @Override
     public boolean onMarkerClick(Marker marker) {
         //center on the marker
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(marker.getPosition().latitude, marker.getPosition().longitude), 16));
         return true;
     }
