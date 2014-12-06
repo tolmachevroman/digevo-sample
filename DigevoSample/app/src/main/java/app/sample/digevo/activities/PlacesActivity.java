@@ -1,15 +1,25 @@
-package app.sample.digevo;
+package app.sample.digevo.activities;
 
-import android.support.v4.app.FragmentActivity;
+import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+
+import app.sample.digevo.R;
 
 public class PlacesActivity extends FragmentActivity {
 
+    public static final int ZOOM = 15;
+    public static final int BEARING = 90;
+    public static final int TILT = 40;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
     @Override
@@ -60,6 +70,30 @@ public class PlacesActivity extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+
+        //enable show my location
+        mMap.setMyLocationEnabled(true);
+
+        //zoom a bit to my position
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+
+        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+        if (location != null)
+        {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(location.getLatitude(), location.getLongitude()), ZOOM));
+
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
+                    .zoom(ZOOM)                   // Sets the zoom
+                    .bearing(BEARING)                // Sets the orientation of the camera to east
+                    .tilt(TILT)                   // Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        }
+
+//        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
     }
 }
