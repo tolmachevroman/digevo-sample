@@ -5,7 +5,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,7 +28,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class PlacesActivity extends FragmentActivity implements GoogleMap.OnInfoWindowClickListener,
+public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInfoWindowClickListener,
         GoogleMap.OnMarkerClickListener {
 
     public static final int ZOOM = 12;
