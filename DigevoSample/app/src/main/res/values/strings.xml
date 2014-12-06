@@ -3,8 +3,10 @@
 
     <string name="app_name">Digevo Sample</string>
     <string name="title_activity_places">Map</string>
-    <string name="list_of_last_calls">List of last calls</string>
+    <string name="action_last_calls">List of last calls</string>
     <string name="please_check_your_internet_connection">Please check your Internet connection</string>
-
     <string name="google_maps_key">AIzaSyDpws4oYM6qJ2qlYJ0bJgZZMEU65AefEjA</string>
+    <string name="title_activity_calls_list">Last Calls</string>
+    <string name="action_map">Show Map</string>
+
 </resources>

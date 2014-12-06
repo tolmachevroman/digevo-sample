@@ -3,6 +3,6 @@
     xmlns:yourapp="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/list"
         android:icon="@drawable/ic_action_view_as_list"
-        android:title="@string/list_of_last_calls"
+        android:title="@string/action_last_calls"
         yourapp:showAsAction="always"/>
 </menu>

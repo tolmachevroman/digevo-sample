@@ -1,6 +1,7 @@
 package app.sample.digevo.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -223,7 +224,7 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.list:
-
+                startActivity(new Intent(PlacesActivity.this, CallsListActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
