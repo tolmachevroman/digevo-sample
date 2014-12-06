@@ -35,4 +35,40 @@ public class Call {
 
     @SerializedName("call_code")
     String code;
+
+    public long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getMachines() {
+        return machines;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public String getCode() {
+        return code;
+    }
 }
