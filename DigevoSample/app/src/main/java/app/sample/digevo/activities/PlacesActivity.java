@@ -18,6 +18,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import app.sample.digevo.R;
 import app.sample.digevo.adapters.CallInfoWindowAdapter;
@@ -35,6 +38,7 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
     public static final int BEARING = 90;
     public static final int TILT = 40;
     public static final int PADDING = 24; //padding from borders of the screen to fit all markers
+    public static final int PERIOD = 1;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private ArrayList<Marker> mMarkers;
 
@@ -43,7 +47,17 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places);
         setUpMapIfNeeded();
-        getLastCalls();
+
+        //each minute get last calls
+        ScheduledExecutorService scheduler =
+                Executors.newSingleThreadScheduledExecutor();
+
+        scheduler.scheduleAtFixedRate
+                (new Runnable() {
+                    public void run() {
+                        getLastCalls();
+                    }
+                }, 0, PERIOD, TimeUnit.MINUTES);
     }
 
     @Override
@@ -123,6 +137,8 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
             public void success(LastCallsResponse lastCallsResponse, Response response) {
                 if (lastCallsResponse != null) {
 
+                    mMap.clear();
+
                     if (mMarkers == null) {
                         mMarkers = new ArrayList<Marker>();
                     } else {
@@ -160,7 +176,7 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
     }
 
     @Override
-    public void onInfoWindowClick(Marker marker) {
+    public void onInfoWindowClick(final Marker marker) {
 
     }
 
