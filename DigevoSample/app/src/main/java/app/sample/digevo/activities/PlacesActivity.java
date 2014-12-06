@@ -43,6 +43,7 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
     public static final int TILT = 40;
     public static final int PADDING = 24; //padding from borders of the screen to fit all markers
     public static final int PERIOD = 60;
+    public static final int INITIAL_DELAY = 3; //wait a few seconds until map is loaded
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private ArrayList<Marker> mMarkers;
 
@@ -61,7 +62,7 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
                     public void run() {
                         getLastCalls();
                     }
-                }, 5, PERIOD, TimeUnit.SECONDS);
+                }, INITIAL_DELAY, PERIOD, TimeUnit.SECONDS);
     }
 
     @Override
