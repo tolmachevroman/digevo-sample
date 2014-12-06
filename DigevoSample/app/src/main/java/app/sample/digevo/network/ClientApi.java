@@ -44,7 +44,7 @@ public class ClientApi {
         service = restAdapter.create(ClientApiDefinitions.class);
     }
 
-    public static void getUntakenLessons(final Callback<LastCallsResponse> callback) {
+    public static void getLastCalls(final Callback<LastCallsResponse> callback) {
         service.getLastCalls(new Callback<LastCallsResponse>() {
             @Override
             public void success(LastCallsResponse lastCallsResponse, Response response) {
