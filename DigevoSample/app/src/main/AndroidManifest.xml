@@ -10,7 +10,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activities.PlacesActivity"
-            android:label="@string/title_activity_places" >
+            android:label="@string/title_activity_places"
+            android:configChanges="keyboardHidden|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
