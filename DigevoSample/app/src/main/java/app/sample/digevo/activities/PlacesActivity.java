@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -148,7 +149,7 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
                         mMarkers.clear();
                     }
 
-                    //fit zoom to show all points on the map
+                    //show and fit all points on the map
                     for (Call call : lastCallsResponse.getData().getCalls()) {
 
                         Marker marker = mMap.addMarker(new MarkerOptions()
@@ -173,7 +174,9 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
 
             @Override
             public void failure(RetrofitError error) {
-
+                if(error.getMessage() != null) {
+                    Toast.makeText(PlacesActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -200,7 +203,6 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
         switch (item.getItemId()) {
             case R.id.list:
 
