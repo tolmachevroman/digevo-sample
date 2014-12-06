@@ -1,17 +1,33 @@
 package app.sample.digevo.activities;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+
 import app.sample.digevo.R;
+import app.sample.digevo.adapters.CallAdapter;
+import app.sample.digevo.network.entities.Call;
 
 public class CallsListActivity extends ActionBarActivity {
+
+    private ListView mCallsList;
+    private CallAdapter mAdapter;
+    private ArrayList<Call> mCalls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calls_list);
+
+        mCalls = (ArrayList<Call>) getIntent().getExtras().getSerializable("calls");
+
+        mCallsList = (ListView) findViewById(R.id.calls_list);
+        mAdapter = new CallAdapter(CallsListActivity.this, 0, mCalls);
+        mCallsList.setAdapter(mAdapter);
     }
 
 

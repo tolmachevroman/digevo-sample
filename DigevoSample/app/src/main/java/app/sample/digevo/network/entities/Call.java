@@ -2,12 +2,13 @@ package app.sample.digevo.network.entities;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by romantolmachev on 6/12/14.
  */
-public class Call {
+public class Call implements Serializable{
 
     @SerializedName("id")
     long id;

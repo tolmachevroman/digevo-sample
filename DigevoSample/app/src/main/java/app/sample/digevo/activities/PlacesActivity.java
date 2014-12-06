@@ -47,6 +47,7 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
     public static final int INITIAL_DELAY = 3; //wait a few seconds until map is loaded
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private ArrayList<Marker> mMarkers;
+    private ArrayList<Call> mCalls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,9 +150,13 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
 
                         if (mMarkers == null) {
                             mMarkers = new ArrayList<Marker>();
+                            mCalls = new ArrayList<Call>();
                         } else {
                             mMarkers.clear();
+                            mCalls.clear();
                         }
+
+                        mCalls.addAll(lastCallsResponse.getData().getCalls());
 
                         //show and fit all points on the map
                         for (Call call : lastCallsResponse.getData().getCalls()) {
@@ -224,7 +229,9 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.list:
-                startActivity(new Intent(PlacesActivity.this, CallsListActivity.class));
+                Intent intent = new Intent(PlacesActivity.this, CallsListActivity.class);
+                intent.putExtra("calls", mCalls);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
