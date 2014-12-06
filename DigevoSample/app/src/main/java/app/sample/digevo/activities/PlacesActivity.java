@@ -42,7 +42,7 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
     public static final int BEARING = 90;
     public static final int TILT = 40;
     public static final int PADDING = 24; //padding from borders of the screen to fit all markers
-    public static final int PERIOD = 1;
+    public static final int PERIOD = 60;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private ArrayList<Marker> mMarkers;
 
@@ -61,7 +61,7 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
                     public void run() {
                         getLastCalls();
                     }
-                }, 0, PERIOD, TimeUnit.MINUTES);
+                }, 5, PERIOD, TimeUnit.SECONDS);
     }
 
     @Override
@@ -136,49 +136,66 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
 
     private void getLastCalls() {
 
-        ClientApi.getLastCalls(new Callback<LastCallsResponse>() {
-            @Override
-            public void success(LastCallsResponse lastCallsResponse, Response response) {
-                if (lastCallsResponse != null) {
+        if(ClientApi.hasActiveInternetConnection(this)) {
 
-                    mMap.clear();
+            ClientApi.getLastCalls(new Callback<LastCallsResponse>() {
+                @Override
+                public void success(LastCallsResponse lastCallsResponse, Response response) {
+                    if (lastCallsResponse != null) {
 
-                    if (mMarkers == null) {
-                        mMarkers = new ArrayList<Marker>();
-                    } else {
-                        mMarkers.clear();
+                        mMap.clear();
+
+                        if (mMarkers == null) {
+                            mMarkers = new ArrayList<Marker>();
+                        } else {
+                            mMarkers.clear();
+                        }
+
+                        //show and fit all points on the map
+                        for (Call call : lastCallsResponse.getData().getCalls()) {
+
+                            Marker marker = mMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(call.getLatitude(), call.getLongitude()))
+                                    .title(call.getTitle())
+                                    .snippet(call.getContent() + "\n" + call.getTimestamp().toString()));
+
+                            mMarkers.add(marker);
+                        }
+
+                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                        for (Marker marker : mMarkers) {
+                            builder.include(marker.getPosition());
+                        }
+                        LatLngBounds bounds = builder.build();
+                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, PADDING);
+
+                        mMap.animateCamera(cameraUpdate);
+
                     }
-
-                    //show and fit all points on the map
-                    for (Call call : lastCallsResponse.getData().getCalls()) {
-
-                        Marker marker = mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(call.getLatitude(), call.getLongitude()))
-                                .title(call.getTitle())
-                                .snippet(call.getContent() + "\n" + call.getTimestamp().toString()));
-
-                        mMarkers.add(marker);
-                    }
-
-                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                    for (Marker marker : mMarkers) {
-                        builder.include(marker.getPosition());
-                    }
-                    LatLngBounds bounds = builder.build();
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, PADDING);
-
-                    mMap.animateCamera(cameraUpdate);
-
                 }
-            }
 
-            @Override
-            public void failure(RetrofitError error) {
-                if(error.getMessage() != null) {
-                    Toast.makeText(PlacesActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                @Override
+                public void failure(final RetrofitError error) {
+                    if(error.getMessage() != null) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(PlacesActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
                 }
-            }
-        });
+            });
+
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), getString(R.string.please_check_your_internet_connection), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
     }
 
     @Override
