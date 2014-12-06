@@ -6,6 +6,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -186,5 +189,24 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(marker.getPosition().latitude, marker.getPosition().longitude), 16));
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.map_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.list:
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
