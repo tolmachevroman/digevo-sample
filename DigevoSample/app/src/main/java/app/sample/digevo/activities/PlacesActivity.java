@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,6 +15,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
 import app.sample.digevo.R;
+import app.sample.digevo.network.ClientApi;
+import app.sample.digevo.network.responses.LastCallsResponse;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class PlacesActivity extends FragmentActivity {
 
@@ -21,12 +27,14 @@ public class PlacesActivity extends FragmentActivity {
     public static final int BEARING = 90;
     public static final int TILT = 40;
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private ClientApi mClientApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places);
         setUpMapIfNeeded();
+        getLastCalls();
     }
 
     @Override
@@ -95,5 +103,22 @@ public class PlacesActivity extends FragmentActivity {
         }
 
 //        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+    }
+
+    private void getLastCalls() {
+
+        mClientApi.getUntakenLessons(new Callback<LastCallsResponse>() {
+            @Override
+            public void success(LastCallsResponse lastCallsResponse, Response response) {
+                if(lastCallsResponse != null) {
+                    Log.d("CALLS SIZE", lastCallsResponse.getData().getCalls().size() + "");
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 }

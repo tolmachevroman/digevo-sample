@@ -3,6 +3,7 @@
     package="app.sample.digevo" >
 
     <application
+        android:name=".configuration.DigevoApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
