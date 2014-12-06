@@ -7,13 +7,17 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 import app.sample.digevo.R;
 import app.sample.digevo.network.ClientApi;
@@ -29,8 +33,9 @@ public class PlacesActivity extends FragmentActivity implements GoogleMap.OnInfo
     public static final int ZOOM = 12;
     public static final int BEARING = 90;
     public static final int TILT = 40;
+    public static final int PADDING = 24; //padding from borders of the screen to fit all markers
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private ClientApi mClientApi;
+    private ArrayList<Marker> mMarkers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,23 +116,36 @@ public class PlacesActivity extends FragmentActivity implements GoogleMap.OnInfo
 
     private void getLastCalls() {
 
-        mClientApi.getUntakenLessons(new Callback<LastCallsResponse>() {
+        ClientApi.getLastCalls(new Callback<LastCallsResponse>() {
             @Override
             public void success(LastCallsResponse lastCallsResponse, Response response) {
                 if (lastCallsResponse != null) {
 
-                    //show all points on the map
+                    if (mMarkers == null) {
+                        mMarkers = new ArrayList<Marker>();
+                    } else {
+                        mMarkers.clear();
+                    }
+
+                    //fit zoom to show all points on the map
                     for (Call call : lastCallsResponse.getData().getCalls()) {
 
-                        mMap.addMarker(new MarkerOptions()
+                        Marker marker = mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(call.getLatitude(), call.getLongitude()))
                                 .title(call.getTitle())
                                 .snippet(call.getContent() + " " + call.getTimestamp().toString()));
+
+                        mMarkers.add(marker);
                     }
 
-                    //zoom the map to fit all points
-//                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-//                            new LatLng(41.889, -87.622), 16));
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    for (Marker marker : mMarkers) {
+                        builder.include(marker.getPosition());
+                    }
+                    LatLngBounds bounds = builder.build();
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, PADDING);
+
+                    mMap.animateCamera(cameraUpdate);
 
                 }
             }
