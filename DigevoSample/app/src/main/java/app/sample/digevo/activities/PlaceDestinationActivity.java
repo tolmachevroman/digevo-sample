@@ -12,11 +12,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -44,9 +46,7 @@ public class PlaceDestinationActivity extends ActionBarActivity {
     public static final int ZOOM = 12;
     public static final int BEARING = 90;
     public static final int TILT = 40;
-    public static final int PADDING = 24; //padding from borders of the screen to fit all markers
-    public static final int PERIOD = 60;
-    public static final int INITIAL_DELAY = 3; //wait a few seconds until map is loaded
+    public static final int PADDING = 40; //padding from borders of the screen to fit all markers
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private LatLng mOrigin;
     private LatLng mDestination;
@@ -174,9 +174,25 @@ public class PlaceDestinationActivity extends ActionBarActivity {
                     }
                     // Adding route on the map
                     mMap.addPolyline(rectLine);
-                    mMarkerOptions.position(mDestination);
+
+                    //show and fit all points on the map
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
                     mMarkerOptions.draggable(true);
+
+                    mMarkerOptions.position(mOrigin);
                     mMap.addMarker(mMarkerOptions);
+                    builder.include(mOrigin);
+
+                    mMarkerOptions.position(mDestination);
+                    mMap.addMarker(mMarkerOptions);
+                    builder.include(mDestination);
+
+                    LatLngBounds bounds = builder.build();
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, PADDING);
+
+                    mMap.animateCamera(cameraUpdate);
+
                 }else{
                     Toast.makeText(PlaceDestinationActivity.this, getString(R.string.unable_to_find_the_route), Toast.LENGTH_LONG).show();
                 }
