@@ -207,7 +207,8 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
 
     @Override
     public void onInfoWindowClick(final Marker marker) {
-
+        startActivity(new Intent(PlacesActivity.this, PlaceDestinationActivity.class)
+                .putExtra("destination", new LatLng(marker.getPosition().latitude, marker.getPosition().longitude)));
     }
 
     @Override

@@ -34,6 +34,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="app.sample.digevo.activities.PlacesActivity" />
         </activity>
+
+        <activity
+            android:name=".activities.PlaceDestinationActivity"
+            android:label="@string/title_activity_call_destination" >
+        </activity>
+
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

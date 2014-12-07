@@ -1,10 +1,15 @@
 package app.sample.digevo.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -12,7 +17,7 @@ import app.sample.digevo.R;
 import app.sample.digevo.adapters.CallAdapter;
 import app.sample.digevo.network.entities.Call;
 
-public class CallsListActivity extends ActionBarActivity {
+public class CallsListActivity extends ActionBarActivity implements AdapterView.OnItemClickListener{
 
     private ListView mCallsList;
     private CallAdapter mAdapter;
@@ -26,8 +31,10 @@ public class CallsListActivity extends ActionBarActivity {
         mCalls = (ArrayList<Call>) getIntent().getExtras().getSerializable("calls");
 
         mCallsList = (ListView) findViewById(R.id.calls_list);
-        mAdapter = new CallAdapter(CallsListActivity.this, 0, mCalls);
+        mAdapter = new CallAdapter(this, 0, mCalls);
         mCallsList.setAdapter(mAdapter);
+        mCallsList.setOnItemClickListener(this);
+
     }
 
 
@@ -48,5 +55,12 @@ public class CallsListActivity extends ActionBarActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Call call = mAdapter.getItem(position);
+        startActivity(new Intent(CallsListActivity.this, PlaceDestinationActivity.class)
+                .putExtra("destination", new LatLng(call.getLatitude(), call.getLongitude())));
     }
 }

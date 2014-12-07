@@ -32,6 +32,18 @@ public class CallAdapter extends ArrayAdapter<Call> {
     }
 
     @Override
+    public boolean areAllItemsEnabled()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled(int arg0)
+    {
+        return true;
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = convertView;
         // reuse views
