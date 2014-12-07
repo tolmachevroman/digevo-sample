@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
 
 import app.sample.digevo.R;
@@ -33,10 +31,10 @@ public class CallsListActivity extends ActionBarActivity implements AdapterView.
         mCallsList = (ListView) findViewById(R.id.calls_list);
         mAdapter = new CallAdapter(this, 0, mCalls);
         mCallsList.setAdapter(mAdapter);
+        mCallsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mCallsList.setOnItemClickListener(this);
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,7 +58,10 @@ public class CallsListActivity extends ActionBarActivity implements AdapterView.
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Call call = mAdapter.getItem(position);
+        Bundle extras = new Bundle();
+        extras.putDouble("destination_latitude", call.getLatitude());
+        extras.putDouble("destination_longitude", call.getLongitude());
         startActivity(new Intent(CallsListActivity.this, PlaceDestinationActivity.class)
-                .putExtra("destination", new LatLng(call.getLatitude(), call.getLongitude())));
+                .putExtras(extras));
     }
 }

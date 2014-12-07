@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:id="@+id/row"
     android:padding="10dp">
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:clickable="false"
         android:focusable="false"/>
 
     <TextView
         android:id="@+id/content_and_timestamp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
         android:inputType="textMultiLine"
         android:maxLines="2"
         android:lineSpacingExtra="3dp"
         android:layout_marginTop="6dp"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:ellipsize="end"
         android:clickable="false"
         android:focusable="false"/>

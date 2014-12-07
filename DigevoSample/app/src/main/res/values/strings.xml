@@ -7,7 +7,14 @@
     <string name="title_activity_call_destination">Destination</string>
     <string name="action_last_calls">List of last calls</string>
     <string name="action_map">Show Map</string>
+
     <string name="please_check_your_internet_connection">Please check your Internet connection</string>
+    <string name="unable_to_find_the_route">Unable to find the route</string>
+    <string name="something_went_wrong_searching_again">Something went wrong, searching again...</string>
+    <string name="searching_route_please_wait">Searching for route, please wait...</string>
+    <string name="searching_places_please_wait">Searching for places, please wait...</string>
+
+
     <string name="google_maps_key">AIzaSyDpws4oYM6qJ2qlYJ0bJgZZMEU65AefEjA</string>
 
 </resources>

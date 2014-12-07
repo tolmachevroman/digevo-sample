@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import app.sample.digevo.network.entities.Call;
 /**
  * Created by romantolmachev on 6/12/14.
  */
-public class CallAdapter extends ArrayAdapter<Call> {
+public class CallAdapter extends ArrayAdapter<Call> implements View.OnClickListener {
 
     private final Activity mContext;
     private List<Call> mCalls;
@@ -32,14 +33,12 @@ public class CallAdapter extends ArrayAdapter<Call> {
     }
 
     @Override
-    public boolean areAllItemsEnabled()
-    {
+    public boolean areAllItemsEnabled() {
         return true;
     }
 
     @Override
-    public boolean isEnabled(int arg0)
-    {
+    public boolean isEnabled(int arg0) {
         return true;
     }
 
@@ -49,7 +48,7 @@ public class CallAdapter extends ArrayAdapter<Call> {
         // reuse views
         if (rowView == null) {
             LayoutInflater inflater = mContext.getLayoutInflater();
-            rowView = inflater.inflate(R.layout.custom_info_window, null);
+            rowView = inflater.inflate(R.layout.call_row, null);
             // configure view holder
             ViewHolder viewHolder = new ViewHolder(rowView);
             rowView.setTag(viewHolder);
@@ -64,11 +63,19 @@ public class CallAdapter extends ArrayAdapter<Call> {
         return rowView;
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
+
     static class ViewHolder {
+
+        public RelativeLayout row;
         public TextView title;
         public TextView contentAndTimestamp;
 
         public ViewHolder(View view) {
+            row = (RelativeLayout) view.findViewById(R.id.row);
             title = (TextView) view.findViewById(R.id.title);
             contentAndTimestamp = (TextView) view.findViewById(R.id.content_and_timestamp);
         }

@@ -65,6 +65,8 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
                         getLastCalls();
                     }
                 }, INITIAL_DELAY, PERIOD, TimeUnit.SECONDS);
+
+        Toast.makeText(this, getString(R.string.searching_places_please_wait), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -190,6 +192,16 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
                                 Toast.makeText(PlacesActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(PlacesActivity.this, getString(R.string.something_went_wrong_searching_again), Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                        //try searching again
+                        getLastCalls();
                     }
                 }
             });
@@ -207,8 +219,11 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
 
     @Override
     public void onInfoWindowClick(final Marker marker) {
+        Bundle extras = new Bundle();
+        extras.putDouble("destination_latitude", marker.getPosition().latitude);
+        extras.putDouble("destination_longitude", marker.getPosition().longitude);
         startActivity(new Intent(PlacesActivity.this, PlaceDestinationActivity.class)
-                .putExtra("destination", new LatLng(marker.getPosition().latitude, marker.getPosition().longitude)));
+                .putExtras(extras));
     }
 
     @Override
@@ -230,6 +245,13 @@ public class PlacesActivity extends ActionBarActivity implements GoogleMap.OnInf
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.list:
+
+                if(mCalls == null)
+                    return true;
+
+                if(mCalls.size() == 0)
+                    return true;
+
                 Intent intent = new Intent(PlacesActivity.this, CallsListActivity.class);
                 intent.putExtra("calls", mCalls);
                 startActivity(intent);
