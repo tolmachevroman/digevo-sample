@@ -1,6 +1,8 @@
 Digevo Sample app
 =============
 
+Fetches list of places in Santiago and constructs a path between current location and selected place.
+
 ![alt tag](https://cloud.githubusercontent.com/assets/560815/5329803/b417d1ca-7da2-11e4-936d-099ebe800615.png)
 
 ![alt tag](https://cloud.githubusercontent.com/assets/560815/5329806/b48363e0-7da2-11e4-898e-ef9a13d025c0.png)
